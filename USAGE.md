@@ -4,14 +4,20 @@
 
 ### 1. 安装工具
 
-#### 全局安装（推荐）
+#### 从 GitHub 安装（推荐）
+```bash
+npm install -g qushuangru/devops-pr-cli
+```
+
+#### 从 npm Registry 安装
 ```bash
 npm install -g devops-pr-cli
 ```
+*（即将推出）*
 
 #### 从源码安装（开发测试）
 ```bash
-git clone <repo-url>
+git clone https://github.com/qushuangru/devops-pr-cli.git
 cd devops-pr-cli
 npm install
 npm link
