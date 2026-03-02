@@ -1,0 +1,1 @@
+{"version":3,"file":"git-detector.d.ts","sourceRoot":"","sources":["../../src/services/git-detector.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,cAAc,EAAE,MAAM,UAAU,CAAC;AAE1C,qBAAa,WAAW;IACtB,OAAO,CAAC,GAAG,CAAY;;IAMjB,gBAAgB,IAAI,OAAO,CAAC,cAAc,CAAC;IAkCjD,OAAO,CAAC,mBAAmB;IAiCrB,gBAAgB,IAAI,OAAO,CAAC,MAAM,CAAC;IAQnC,qBAAqB,IAAI,OAAO,CAAC,OAAO,CAAC;CAIhD"}

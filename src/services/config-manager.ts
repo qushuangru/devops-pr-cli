@@ -53,10 +53,16 @@ export class ConfigManager {
       }
     };
 
-    // Test PAT token
+    // Test PAT token (non-blocking)
     console.log(chalk.yellow('\n⏳ Testing PAT token...'));
-    await this.testConnection(config);
-    console.log(chalk.green('✓ PAT token is valid!\n'));
+    try {
+      await this.testConnection(config);
+      console.log(chalk.green('✓ PAT token is valid!\n'));
+    } catch (error) {
+      console.log(chalk.yellow('⚠ Could not verify PAT token (this may be normal for some servers)'));
+      console.log(chalk.gray(`  Error: ${(error as Error).message}`));
+      console.log(chalk.gray('  Configuration will be saved anyway. You can test it by running commands.\n'));
+    }
 
     // Save configuration
     this.save(config);
