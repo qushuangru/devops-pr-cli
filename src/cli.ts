@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import { ConfigManager } from './services/config-manager';
 import { registerPRCommands } from './commands/pr';
 import { registerConfigCommands } from './commands/config';
+import * as packageJson from '../package.json';
 
 const program = new Command();
 const configManager = new ConfigManager();
@@ -12,7 +13,7 @@ const configManager = new ConfigManager();
 program
   .name('devops-pr')
   .description('CLI tool for managing Azure DevOps pull requests')
-  .version('1.0.0');
+  .version(packageJson.version);
 
 // Register commands
 registerConfigCommands(program, configManager);
