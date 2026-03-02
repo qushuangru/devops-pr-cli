@@ -252,6 +252,24 @@ npm test
 
 **解决方案**：添加指向您的 Azure DevOps 仓库的 origin 远程仓库。
 
+## 更新工具
+
+更新到最新版本：
+
+```bash
+npm install -g qushuangru/devops-pr-cli
+```
+
+这将从 GitHub 下载并安装最新代码。
+
+**注意：** 如果从旧版本升级，建议重新初始化配置以移除已弃用的字段：
+
+```bash
+devops-pr config init
+```
+
+新的配置向导只会询问服务器 URL、PAT 令牌和默认分支（组织/项目现在自动检测）。
+
 ## 系统要求
 
 - Node.js >= 16.0.0
@@ -263,7 +281,7 @@ npm test
 ### 设置
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/qushuangru/devops-pr-cli.git
 cd devops-pr-cli
 npm install
 ```

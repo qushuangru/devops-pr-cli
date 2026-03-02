@@ -252,6 +252,24 @@ npm test
 
 **Solution**: Add an origin remote pointing to your Azure DevOps repository.
 
+## Upgrading
+
+To update to the latest version:
+
+```bash
+npm install -g qushuangru/devops-pr-cli
+```
+
+This will download and install the latest code from GitHub.
+
+**Note:** If you're upgrading from an older version, you may want to reinitialize your config to remove deprecated fields:
+
+```bash
+devops-pr config init
+```
+
+The new config wizard only asks for server URL, PAT token, and default branch (organization/project are now auto-detected).
+
 ## Requirements
 
 - Node.js >= 16.0.0
