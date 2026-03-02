@@ -18,30 +18,26 @@
 
 ## 安装
 
-### 从 GitHub 安装
+### 从源码安装（推荐）
 
-直接从 GitHub 仓库安装：
+克隆并从源码安装，最可靠的安装方式：
+
+```bash
+git clone https://github.com/qushuangru/devops-pr-cli.git
+cd devops-pr-cli
+npm install --omit=dev
+npm link
+```
+
+此方法确保所有编译文件都被正确安装。
+
+### 快速安装
 
 ```bash
 npm install -g qushuangru/devops-pr-cli
 ```
 
-或使用完整 URL：
-
-```bash
-npm install -g https://github.com/qushuangru/devops-pr-cli
-```
-
-### 从源码安装
-
-克隆并从源码安装：
-
-```bash
-git clone https://github.com/qushuangru/devops-pr-cli.git
-cd devops-pr-cli
-npm install
-npm link
-```
+**注意：** 如果快速安装遇到问题（文件缺失、命令找不到），请使用上面的"从源码安装"方法。
 
 ## 快速开始
 
