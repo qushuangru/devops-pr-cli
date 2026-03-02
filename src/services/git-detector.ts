@@ -43,10 +43,10 @@ export class GitDetector {
   }
 
   private parseAzureDevOpsUrl(url: string): Omit<RepositoryInfo, 'currentBranch' | 'remoteName' | 'remoteUrl'> {
-    // Handle SSH format: ssh://devops.momenta.works:22/Momenta/IS/_git/is_data_spa
+    // Handle SSH format: ssh://dev.azure.com:22/Organization/Project/_git/repository
     const sshPattern = /ssh:\/\/([^:]+):?\d*\/([^\/]+)\/([^\/]+)\/_git\/(.+)/;
 
-    // Handle HTTPS format: https://devops.momenta.works/Momenta/IS/_git/is_data_spa
+    // Handle HTTPS format: https://dev.azure.com/Organization/Project/_git/repository
     const httpsPattern = /https:\/\/([^\/]+)\/([^\/]+)\/([^\/]+)\/_git\/(.+)/;
 
     let match = url.match(sshPattern);

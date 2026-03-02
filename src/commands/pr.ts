@@ -24,12 +24,14 @@ export function registerPRCommands(program: Command, configManager: ConfigManage
       try {
         const config = configManager.load();
         const gitDetector = new GitDetector();
-        const client = new AzureDevOpsClient(config);
 
         // Detect git repository info
         const spinner = ora('Detecting repository information...').start();
         const repoInfo = await gitDetector.detectRepository();
         spinner.succeed('Repository detected');
+
+        // Create client with detected repository context
+        const client = new AzureDevOpsClient(config, repoInfo);
 
         // Get repository ID
         spinner.start('Fetching repository details...');
@@ -78,7 +80,7 @@ export function registerPRCommands(program: Command, configManager: ConfigManage
 
         // Display result
         console.log(chalk.green(`   PR #${pr.pullRequestId}: ${pr.title}`));
-        const webUrl = `${config.server}/${config.organization}/${config.project}/_git/${repoInfo.repositoryName}/pullrequest/${pr.pullRequestId}`;
+        const webUrl = `${repoInfo.server}/${repoInfo.organization}/${repoInfo.project}/_git/${repoInfo.repositoryName}/pullrequest/${pr.pullRequestId}`;
         console.log(chalk.blue(`   ${webUrl}\n`));
         console.log(chalk.gray(`   ${repoInfo.currentBranch} → ${targetBranch}`));
         console.log(chalk.gray(`   Status: ${pr.status}\n`));
@@ -99,10 +101,15 @@ export function registerPRCommands(program: Command, configManager: ConfigManage
       try {
         const config = configManager.load();
         const gitDetector = new GitDetector();
-        const client = new AzureDevOpsClient(config);
 
-        const spinner = ora('Fetching repository information...').start();
+        const spinner = ora('Detecting repository information...').start();
         const repoInfo = await gitDetector.detectRepository();
+        spinner.succeed('Repository detected');
+
+        // Create client with detected repository context
+        const client = new AzureDevOpsClient(config, repoInfo);
+
+        spinner.start('Fetching repository details...');
         const repositoryId = await client.getRepositoryId(repoInfo.repositoryName);
         spinner.succeed();
 
@@ -135,10 +142,15 @@ export function registerPRCommands(program: Command, configManager: ConfigManage
       try {
         const config = configManager.load();
         const gitDetector = new GitDetector();
-        const client = new AzureDevOpsClient(config);
 
-        const spinner = ora('Fetching repository information...').start();
+        const spinner = ora('Detecting repository information...').start();
         const repoInfo = await gitDetector.detectRepository();
+        spinner.succeed('Repository detected');
+
+        // Create client with detected repository context
+        const client = new AzureDevOpsClient(config, repoInfo);
+
+        spinner.start('Fetching repository details...');
         const repositoryId = await client.getRepositoryId(repoInfo.repositoryName);
         spinner.succeed();
 
@@ -154,7 +166,7 @@ export function registerPRCommands(program: Command, configManager: ConfigManage
         if (options.json) {
           console.log(JSON.stringify({ pr, threads }, null, 2));
         } else {
-          console.log(Formatter.formatPRDetail(pr, config, threads));
+          console.log(Formatter.formatPRDetail(pr, repoInfo, threads));
         }
 
       } catch (error) {
@@ -171,11 +183,16 @@ export function registerPRCommands(program: Command, configManager: ConfigManage
       try {
         const config = configManager.load();
         const gitDetector = new GitDetector();
-        const client = new AzureDevOpsClient(config);
         const git = simpleGit();
 
-        const spinner = ora('Fetching pull request information...').start();
+        const spinner = ora('Detecting repository information...').start();
         const repoInfo = await gitDetector.detectRepository();
+        spinner.succeed('Repository detected');
+
+        // Create client with detected repository context
+        const client = new AzureDevOpsClient(config, repoInfo);
+
+        spinner.start('Fetching pull request information...');
         const repositoryId = await client.getRepositoryId(repoInfo.repositoryName);
         const pr = await client.getPR(repositoryId, parseInt(prId));
         spinner.succeed();

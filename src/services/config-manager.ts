@@ -12,33 +12,23 @@ const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 export class ConfigManager {
   async init(): Promise<Config> {
     console.log(chalk.cyan('🚀 Azure DevOps PR CLI - Configuration Wizard\n'));
+    console.log(chalk.gray(
+      'This tool automatically detects organization and project from your git remote.\n' +
+      'You only need to configure your PAT token and preferences.\n'
+    ));
 
     const answers = await inquirer.prompt([
       {
         type: 'input',
         name: 'server',
-        message: 'Enter your Azure DevOps server URL:',
-        default: 'https://devops.momenta.works',
+        message: 'Enter your Azure DevOps server URL (optional, auto-detected from git):',
+        default: 'https://dev.azure.com',
         validate: (input: string) => {
           if (!input.startsWith('http://') && !input.startsWith('https://')) {
             return 'URL must start with http:// or https://';
           }
           return true;
         }
-      },
-      {
-        type: 'input',
-        name: 'organization',
-        message: 'Enter your organization name:',
-        default: 'Momenta',
-        validate: (input: string) => input.length > 0 || 'Organization name is required'
-      },
-      {
-        type: 'input',
-        name: 'project',
-        message: 'Enter your project name:',
-        default: 'IS',
-        validate: (input: string) => input.length > 0 || 'Project name is required'
       },
       {
         type: 'password',
@@ -57,18 +47,16 @@ export class ConfigManager {
 
     const config: Config = {
       server: answers.server.replace(/\/$/, ''), // Remove trailing slash
-      organization: answers.organization,
-      project: answers.project,
       pat: answers.pat,
       defaults: {
         targetBranch: answers.targetBranch
       }
     };
 
-    // Test connection
-    console.log(chalk.yellow('\n⏳ Testing connection...'));
+    // Test PAT token
+    console.log(chalk.yellow('\n⏳ Testing PAT token...'));
     await this.testConnection(config);
-    console.log(chalk.green('✓ Connection successful!\n'));
+    console.log(chalk.green('✓ PAT token is valid!\n'));
 
     // Save configuration
     this.save(config);
@@ -104,12 +92,21 @@ export class ConfigManager {
     const config = this.load();
 
     console.log(chalk.cyan('\n📋 Current Configuration:\n'));
-    console.log(chalk.gray('Server:      '), config.server);
-    console.log(chalk.gray('Organization:'), config.organization);
-    console.log(chalk.gray('Project:     '), config.project);
-    console.log(chalk.gray('PAT Token:   '), chalk.yellow('*'.repeat(20)));
-    console.log(chalk.gray('Target Branch:'), config.defaults.targetBranch);
-    console.log(chalk.gray('\nConfig file: '), CONFIG_FILE);
+    console.log(chalk.gray('Server:        '), config.server);
+    console.log(chalk.gray('PAT Token:     '), chalk.yellow('*'.repeat(20)));
+    console.log(chalk.gray('Target Branch: '), config.defaults.targetBranch);
+    console.log(chalk.gray('\nConfig file:   '), CONFIG_FILE);
+    console.log(chalk.gray('\nNote: Organization and project are auto-detected from git remote URL.'));
+
+    // Show deprecation warning if old fields present
+    if (config.organization || config.project) {
+      console.log(chalk.yellow(
+        '\n⚠️  Deprecated fields detected in config:\n' +
+        '    - organization and project are no longer used\n' +
+        '    - These values are now automatically detected from your git remote\n' +
+        '    - You can safely remove them from the config file'
+      ));
+    }
   }
 
   exists(): boolean {
@@ -119,7 +116,9 @@ export class ConfigManager {
   private async testConnection(config: Config): Promise<void> {
     try {
       const auth = Buffer.from(`:${config.pat}`).toString('base64');
-      const url = `${config.server}/${config.organization}/${config.project}/_apis/git/repositories?api-version=6.0`;
+      // Test PAT token validity by querying projects API
+      // This validates the token without requiring specific org/project
+      const url = `${config.server}/_apis/projects?api-version=6.0`;
 
       await axios.get(url, {
         headers: {

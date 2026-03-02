@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import { formatDistance } from 'date-fns';
-import { PullRequest, Config } from '../types';
+import { PullRequest, RepositoryInfo } from '../types';
 
 export class Formatter {
   static formatPRList(prs: PullRequest[]): string {
@@ -37,7 +37,7 @@ export class Formatter {
     return table.toString();
   }
 
-  static formatPRDetail(pr: PullRequest, config: Config, threads?: any[]): string {
+  static formatPRDetail(pr: PullRequest, repoInfo: RepositoryInfo, threads?: any[]): string {
     const sourceBranch = pr.sourceRefName.replace('refs/heads/', '');
     const targetBranch = pr.targetRefName.replace('refs/heads/', '');
     const timeAgo = formatDistance(new Date(pr.creationDate), new Date(), { addSuffix: true });
@@ -73,7 +73,7 @@ export class Formatter {
     }
 
     // Add web URL
-    const webUrl = `${config.server}/${config.organization}/${config.project}/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
+    const webUrl = `${repoInfo.server}/${repoInfo.organization}/${repoInfo.project}/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
     output += '\n' + chalk.bold('  View online: ') + chalk.blue(webUrl) + '\n';
 
     return output;

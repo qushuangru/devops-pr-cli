@@ -1,17 +1,28 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import { Config, PullRequest, ListPRParams, CreatePRParams, Thread } from '../types';
+import { Config, PullRequest, ListPRParams, CreatePRParams, Thread, RepositoryInfo } from '../types';
 
 export class AzureDevOpsClient {
-  private axiosInstance: AxiosInstance;
-  private config: Config;
+  private readonly axiosInstance: AxiosInstance;
+  private readonly server: string;
 
-  constructor(config: Config) {
-    this.config = config;
+  constructor(config: Config, repoInfo?: RepositoryInfo) {
+    // Use detected values from git remote if available, fallback to config
+    const server = repoInfo?.server || config.server;
+    const organization = repoInfo?.organization || config.organization;
+    const project = repoInfo?.project || config.project;
 
+    if (!organization || !project) {
+      throw new Error(
+        'Organization and project must be detected from git remote or provided in config.\n' +
+        'Ensure you are in a git repository with Azure DevOps remote.'
+      );
+    }
+
+    this.server = server;
     const auth = Buffer.from(`:${config.pat}`).toString('base64');
 
     this.axiosInstance = axios.create({
-      baseURL: `${config.server}/${config.organization}/${config.project}/_apis`,
+      baseURL: `${server}/${organization}/${project}/_apis`,
       headers: {
         'Authorization': `Basic ${auth}`,
         'Content-Type': 'application/json',
@@ -19,6 +30,10 @@ export class AzureDevOpsClient {
       },
       timeout: 30000
     });
+  }
+
+  getServer(): string {
+    return this.server;
   }
 
   async createPR(params: CreatePRParams): Promise<PullRequest> {
@@ -141,7 +156,7 @@ export class AzureDevOpsClient {
 
       if (axiosError.code === 'ECONNREFUSED' || axiosError.code === 'ENOTFOUND') {
         return new Error(
-          `Unable to connect to ${this.config.server}\n` +
+          `Unable to connect to ${this.server}\n` +
           'Please check your network connection and server URL.'
         );
       }

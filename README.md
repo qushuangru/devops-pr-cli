@@ -1,5 +1,7 @@
 # devops-pr-cli
 
+[English](README.md) | [中文](README_CN.md)
+
 CLI tool for creating and managing Azure DevOps pull requests from the command line.
 
 ## Features
@@ -8,7 +10,8 @@ CLI tool for creating and managing Azure DevOps pull requests from the command l
 - 📋 List and filter pull requests
 - 🔍 View detailed PR information
 - 🔄 Checkout PR branches locally
-- 🎯 Auto-detect repository information from git
+- 🎯 Auto-detect repository information from git (org/project/repo)
+- 🌐 One config works across all projects in your organization
 - 💬 Interactive prompts for easy usage
 - 🔐 Secure PAT token authentication
 - 🎨 Beautiful terminal output
@@ -41,11 +44,11 @@ devops-pr config init
 ```
 
 You'll be prompted to enter:
-- Azure DevOps server URL (e.g., `https://devops.momenta.works`)
-- Organization name (e.g., `Momenta`)
-- Project name (e.g., `IS`)
+- Azure DevOps server URL (e.g., `https://dev.azure.com` or your on-premise server)
 - Personal Access Token (PAT)
-- Default target branch (e.g., `master`)
+- Default target branch (e.g., `main` or `master`)
+
+**Note:** Organization, project, and repository are automatically detected from your git remote URL. No need to configure them manually!
 
 Configuration is saved to `~/.devops-pr-cli/config.json`
 
@@ -160,7 +163,7 @@ To use this tool, you need a Personal Access Token with the following permission
 5. Copy the generated token
 6. Use it during `devops-pr config init`
 
-Example URL: `https://devops.momenta.works/_usersSettings/tokens`
+Example URL: `https://dev.azure.com/{your-organization}/_usersSettings/tokens`
 
 ## Examples
 

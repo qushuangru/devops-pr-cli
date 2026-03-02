@@ -1,8 +1,10 @@
 // Configuration types
 export interface Config {
   server: string;
-  organization: string;
-  project: string;
+  /** @deprecated Organization is now auto-detected from git remote URL */
+  organization?: string;
+  /** @deprecated Project is now auto-detected from git remote URL */
+  project?: string;
   pat: string;
   defaults: {
     targetBranch: string;

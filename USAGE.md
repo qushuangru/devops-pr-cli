@@ -11,7 +11,8 @@ npm install -g devops-pr-cli
 
 #### 从源码安装（开发测试）
 ```bash
-cd /Users/qushuangru/work/devops-pr-cli
+git clone <repo-url>
+cd devops-pr-cli
 npm install
 npm link
 ```
@@ -24,11 +25,11 @@ devops-pr config init
 ```
 
 按照提示输入：
-- **Server URL**: `https://devops.momenta.works`
-- **Organization**: `Momenta`
-- **Project**: `IS`
+- **Server URL**: `https://dev.azure.com` 或您的私有服务器
 - **PAT Token**: 你的个人访问令牌
-- **Default Target Branch**: `master`
+- **Default Target Branch**: `main` 或 `master`
+
+**💡 提示：** 组织（Organization）和项目（Project）会自动从 git remote URL 中检测，无需手动配置！这意味着同一个配置可以用于不同的项目。
 
 ### 3. 验证配置
 
@@ -90,7 +91,7 @@ devops-pr pr checkout 1112446
 
 ## 🔑 获取 PAT Token
 
-1. 访问：https://devops.momenta.works/_usersSettings/tokens
+1. 访问：`https://dev.azure.com/{your-organization}/_usersSettings/tokens`
 2. 点击 **New Token**
 3. 设置权限：
    - ✅ **Code**: Read
@@ -166,7 +167,7 @@ devops-pr pr list
 
 ### 之前（使用 curl）
 ```bash
-curl -u :TOKEN https://devops.momenta.works/Momenta/IS/_apis/git/repositories/is_data_spa/pullrequests?api-version=6.0 -X POST -d '...'
+curl -u :TOKEN https://dev.azure.com/Organization/Project/_apis/git/repositories/repo-name/pullrequests?api-version=6.0 -X POST -d '...'
 ```
 
 ### 现在（使用 devops-pr）
@@ -188,7 +189,6 @@ npm config set registry http://your-private-registry.com
 npm login
 
 # 发布
-cd /Users/qushuangru/work/devops-pr-cli
 npm publish
 ```
 
