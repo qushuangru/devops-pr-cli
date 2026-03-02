@@ -1,6 +1,6 @@
 {
   "name": "devops-pr-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool for creating and managing Azure DevOps pull requests",
   "main": "dist/index.js",
   "bin": {
