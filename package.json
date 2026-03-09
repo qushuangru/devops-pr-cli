@@ -11,7 +11,8 @@
     "dev": "ts-node src/cli.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "azure-devops",
@@ -24,6 +25,14 @@
   ],
   "author": "Shuangru Qu",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qushuangru/devops-pr-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qushuangru/devops-pr-cli/issues"
+  },
+  "homepage": "https://github.com/qushuangru/devops-pr-cli#readme",
   "dependencies": {
     "commander": "^11.1.0",
     "inquirer": "^9.2.12",

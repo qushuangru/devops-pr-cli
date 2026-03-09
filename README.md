@@ -18,26 +18,23 @@ CLI tool for creating and managing Azure DevOps pull requests from the command l
 
 ## Installation
 
-### From Source (Recommended)
+### From npm (Recommended)
 
-Clone and install from source for the most reliable installation:
+```bash
+npm install -g devops-pr-cli
+```
+
+### From Source
+
+For development or contributing:
 
 ```bash
 git clone https://github.com/qushuangru/devops-pr-cli.git
 cd devops-pr-cli
-npm install --omit=dev
+npm install
+npm run build
 npm link
 ```
-
-This method ensures all compiled files are properly installed.
-
-### Quick Install from GitHub
-
-```bash
-npm install -g qushuangru/devops-pr-cli
-```
-
-**Note:** If you encounter issues with the quick install method (missing files, command not found), please use the "From Source" method above.
 
 ## Quick Start
 
@@ -253,10 +250,8 @@ npm test
 To update to the latest version:
 
 ```bash
-npm install -g qushuangru/devops-pr-cli
+npm update -g devops-pr-cli
 ```
-
-This will download and install the latest code from GitHub.
 
 **Note:** If you're upgrading from an older version, you may want to reinitialize your config to remove deprecated fields:
 
